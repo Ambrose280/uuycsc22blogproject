@@ -32,6 +32,21 @@ def login():
 def signup():
     return render_template('signup.html')
 
+@app.route('/pageinfo', methods=['GET'])
+def pageinfo():
+    return render_template('pageinfo.html')
+
+@app.route('/createpost', methods=['GET', 'POST'])
+def createpost():
+    return render_template('createpost.html')
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 
 
