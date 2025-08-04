@@ -1,3 +1,5 @@
+export FLASK_APP=app.py 
+
 | Template              | Purpose                                 |
 | --------------------- | --------------------------------------- |
 | `register.html`       | User registration form                  |
@@ -15,3 +17,4 @@
 | `base.html`           | Common layout (navigation, flash, etc.) |
 | `404.html`            | Not found error page                    |
 | `500.html`            | Internal error page                     |
+
