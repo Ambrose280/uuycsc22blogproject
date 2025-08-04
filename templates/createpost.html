@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog2Go - Create Post</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f7fafc;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4285f4 0%, #1976d2 100%);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #4285f4;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #4285f4 0%, #1976d2 100%);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .logout-link {
+            color: #e53e3e !important;
+        }
+
+        .logout-link:hover {
+            background: #fed7d7 !important;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 32px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+            text-decoration: none;
+            margin-bottom: 24px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: #4285f4;
+        }
+
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .editor-container {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .title-section {
+            margin-bottom: 32px;
+        }
+
+        .title-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 42px;
+            font-weight: 300;
+            color: #2d3748;
+            background: transparent;
+            font-style: italic;
+            line-height: 1.2;
+            padding: 16px 0;
+        }
+
+        .title-input::placeholder {
+            color: #a0aec0;
+        }
+
+        .character-count {
+            text-align: right;
+            color: #718096;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .featured-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f8fafc;
+        }
+
+        .upload-area:hover {
+            border-color: #4285f4;
+            background: #f0f8ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #4285f4;
+            background: #e6f3ff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #4285f4;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .content-section {
+            margin-bottom: 32px;
+        }
+
+        .content-editor {
+            width: 100%;
+            min-height: 400px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #2d3748;
+            background: transparent;
+            resize: vertical;
+            padding: 20px 0;
+            font-family: inherit;
+        }
+
+        .content-editor::placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 12px;
+            padding: 16px 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .toolbar-btn:hover {
+            background: #f7fafc;
+            border-color: #4285f4;
+        }
+
+        .toolbar-btn.active {
+            background: #4285f4;
+            color: white;
+            border-color: #4285f4;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4 0%, #1976d2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            margin-top: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .editor-container {
+                padding: 20px;
+            }
+
+            .title-input {
+                font-size: 28px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .toolbar-btn {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="profile-section">
+            <div class="profile-avatar">CB</div>
+            <div class="profile-name">Confidence Banny</div>
+            <div class="profile-role">Blogger</div>
+        </div>
+        
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('dashboard')">
+                        <span class="nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('posts')">
+                        <span class="nav-icon">📝</span>
+                        My Posts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showSection('create')">
+                        <span class="nav-icon">➕</span>
+                        Create Post
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('settings')">
+                        <span class="nav-icon">⚙️</span>
+                        Account Settings
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="logout-btn">
+                <a href="#" class="nav-link logout-link" onclick="handleLogout()">
+                    <span class="nav-icon">🚪</span>
+                    Log Out
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <a href="#" class="back-btn" onclick="goBack()">
+            ← Back
+        </a>
+
+        <header class="header">
+            <h1>Create Post</h1>
+        </header>
+
+        <div class="editor-container">
+            <div class="title-section">
+                <input 
+                    type="text" 
+                    class="title-input" 
+                    placeholder="Your Amazing Title Goes Here..."
+                    maxlength="100"
+                    oninput="updateCharacterCount()"
+                    id="postTitle"
+                >
+                <div class="character-count">0/100 Characters</div>
+            </div>
+
+            <div class="featured-section">
+                <h3 class="section-title">Featured Image/Video</h3>
+                <div class="upload-area" onclick="triggerFileUpload()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Click to upload featured image/video</div>
+                    <div class="upload-subtext">Supports JPG, PNG, GIF, MP4 (Max: 10MB)</div>
+                </div>
+                <input type="file" class="hidden-input" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
+                <div id="imagePreview"></div>
+            </div>
+
+            <div class="content-section">
+                <div class="editor-toolbar">
+                    <button class="toolbar-btn" onclick="formatText('bold')" title="Bold">
+                        <strong>B</strong>
+                    </button>
+                    <button class="toolbar-btn" onclick="formatText('italic')" title="Italic">
+                        <em>I</em>
+                    </button>
+                    <button class="toolbar-btn" onclick="formatText('underline')" title="Underline">
+                        <u>U</u>
+                    </button>
+                    <button class="toolbar-btn" onclick="insertLink()" title="Insert Link">
+                        🔗
+                    </button>
+                    <button class="toolbar-btn" onclick="insertList()" title="Bullet List">
+                        •
+                    </button>
+                    <button class="toolbar-btn" onclick="insertQuote()" title="Quote">
+                        "
+                    </button>
+                </div>
+                
+                <textarea 
+                    class="content-editor" 
+                    placeholder="Start writing your amazing content..."
+                    id="postContent"
+                ></textarea>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="saveDraft()">
+                    Save as Draft
+                </button>
+                <button class="btn btn-primary" onclick="publishPost()">
+                    Publish Post
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showSection(section) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            alert(`Would navigate to ${section} section`);
+        }
+
+        function goBack() {
+            alert('Would go back to dashboard');
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                alert('Logged out successfully');
+            }
+        }
+
+        function updateCharacterCount() {
+            const titleInput = document.getElementById('postTitle');
+            const characterCount = document.querySelector('.character-count');
+            const count = titleInput.value.length;
+            characterCount.textContent = `${count}/100 Characters`;
+            
+            if (count > 80) {
+                characterCount.style.color = '#e53e3e';
+            } else {
+                characterCount.style.color = '#718096';
+            }
+        }
+
+        function triggerFileUpload() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                displayFilePreview(file);
+            }
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const uploadArea = event.currentTarget;
+            uploadArea.classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                displayFilePreview(files[0]);
+            }
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+
+        function displayFilePreview(file) {
+            const previewDiv = document.getElementById('imagePreview');
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewDiv.innerHTML = `<img src="${e.target.result}" class="image-preview" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewDiv.innerHTML = `<div style="padding: 16px; background: #f0f8ff; border-radius: 8px; margin-top: 16px; text-align: center;">
+                    📹 Video file selected: ${file.name}
+                </div>`;
+            }
+        }
+
+        function formatText(command) {
+            const textarea = document.getElementById('postContent');
+            textarea.focus();
+            
+            // This is a simplified version - in a real editor you'd need more sophisticated text formatting
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            let formattedText = '';
+            switch(command) {
+                case 'bold':
+                    formattedText = `**${selectedText}**`;
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText}*`;
+                    break;
+                case 'underline':
+                    formattedText = `<u>${selectedText}</u>`;
+                    break;
+            }
+            
+            textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                const textarea = document.getElementById('postContent');
+                const linkText = `[Link](${url})`;
+                insertAtCursor(textarea, linkText);
+            }
+        }
+
+        function insertList() {
+            const textarea = document.getElementById('postContent');
+            insertAtCursor(textarea, '\n• ');
+        }
+
+        function insertQuote() {
+            const textarea = document.getElementById('postContent');
+            insertAtCursor(textarea, '\n> ');
+        }
+
+        function insertAtCursor(textarea, text) {
+            const start = textarea.selectionStart;
+            textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(start);
+            textarea.focus();
+            textarea.setSelectionRange(start + text.length, start + text.length);
+        }
+
+        function saveDraft() {
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            
+            if (!title.trim()) {
+                alert('Please enter a title for your post');
+                return;
+            }
+            
+            alert('Post saved as draft successfully!');
+        }
+
+        function publishPost() {
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            
+            if (!title.trim()) {
+                alert('Please enter a title for your post');
+                return;
+            }
+            
+            if (!content.trim()) {
+                alert('Please add some content to your post');
+                return;
+            }
+            
+            alert('Post published successfully!');
+        }
+
+        // Auto-save functionality
+        let autoSaveTimeout;
+        function autoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                const title = document.getElementById('postTitle').value;
+                const content = document.getElementById('postContent').value;
+                
+                if (title.trim() || content.trim()) {
+                    console.log('Auto-saving...');
+                    // In a real app, this would save to the server
+                }
+            }, 5000);
+        }
+
+        document.getElementById('postTitle').addEventListener('input', autoSave);
+        document.getElementById('postContent').addEventListener('input', autoSave);
+    </script>
+</body>
+</html>
