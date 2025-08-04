@@ -19,20 +19,19 @@ migrate = Migrate(app, db)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            return redirect(url_for('home'))
     return render_template('login.html')
+
+@app.route('/createpost', methods=['GET', 'POST'])
+def createpost():
+    return render_template('createpost.html')
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    return render_template('dashboard.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     return render_template('signup.html')
-
-
 
 
 if __name__ == '__main__':
