@@ -1,4 +1,10 @@
-export FLASK_APP=app.py 
+The database is in the 
+/instance folder
+/migrations is basically where datamodels are kept ypu dont need to tamper with that, its automatically configured by flask
+
+/templates is where our html files will be kept
+
+please only make pull requests and never commit to master until I approve
 
 | Template              | Purpose                                 |
 | --------------------- | --------------------------------------- |
@@ -17,4 +23,3 @@ export FLASK_APP=app.py
 | `base.html`           | Common layout (navigation, flash, etc.) |
 | `404.html`            | Not found error page                    |
 | `500.html`            | Internal error page                     |
-
