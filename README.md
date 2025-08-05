@@ -1,25 +1,112 @@
-The database is in the 
-/instance folder
-/migrations is basically where datamodels are kept ypu dont need to tamper with that, its automatically configured by flask
 
-/templates is where our html files will be kept
+````
 
-please only make pull requests and never commit to master until I approve
+This implementation:
+1. Handles form submission
+2. Validates required fields
+3. Checks email format
+4. Stores raw password in database (not recommended for production)
+5. Handles duplicate username/email errors
+6. Redirects to login page after successful registration
 
-| Template              | Purpose                                 |
-| --------------------- | --------------------------------------- |
-| `register.html`       | User registration form                  |
-| `login.html`          | Login form                              |
-| `profile.html`        | Public profile view                     |
-| `edit_profile.html`   | Profile update form                     |
-| `create_post.html`    | New post creation form                  |
-| `edit_post.html`      | Edit existing post                      |
-| `post_detail.html`    | Full view of a single post              |
-| `home.html`           | Homepage with post list & search        |
-| `category_posts.html` | Posts by category                       |
-| `search_results.html` | Posts by search                         |
-| `_comments.html`      | Comment + reply section (partial)       |
-| `bookmarks.html`      | View saved/bookmarked posts             |
-| `base.html`           | Common layout (navigation, flash, etc.) |
-| `404.html`            | Not found error page                    |
-| `500.html`            | Internal error page                     |
+Make sure you have the templates directory created and the `signup.html` file in it before running the application.
+
+**Note**: Storing plain text passwords is not secure and should never be done in a production environment. Always use password hashing in real applications.
+
+Similar code found with 2 license types
+
+Ambrose280: analyse the contentes of these files and gimme the basic desing of all the elements
+
+GitHub Copilot: I'll analyze the template files and break down their basic design structure:
+
+### Base Template (base.html)
+- **Structure**:
+  - Header with site title "My Blog"
+  - Navigation bar with:
+    - Home, About, Contact links
+    - Conditional user menu (logged in/out state)
+  - Main content area (`{% block content %}`)
+  - Footer with copyright
+- **Dynamic Elements**:
+  - User welcome message if logged in
+  - Login/Logout toggle
+  - Create Post link for logged-in users
+
+### Signup Page (signup.html)
+- **Form Elements**:
+  - Hidden CSRF token
+  - Username input (text)
+  - Email input (email)
+  - Password input (password)
+  - Submit button "Create Account"
+- **Inherits base template**
+
+### Login Page (login.html)
+- **Form Elements**:
+  - Hidden CSRF token
+  - Username input
+  - Password input
+  - Login button
+- **Additional Features**:
+  - Error message display (in red)
+  - Welcome message if logged in
+- **Inherits base template**
+
+### Create Post Page (createpost.html)
+- **Form Elements**:
+  - Hidden CSRF token
+  - Title input
+  - Featured image upload
+  - Category dropdown
+  - Draft checkbox
+  - Content textarea (80 cols × 10 rows)
+  - Submit button
+- **Additional Features**:
+  - Error message display
+  - File upload support
+- **Inherits base template**
+
+### Edit Post Page (editpost.html)
+- **Form Elements**:
+  - Similar to create post but pre-filled
+  - Current image display
+  - Option to change image
+  - Category selection (with current selection)
+  - Draft status toggle
+  - Content editor
+  - Update button
+- **Inherits base template**
+
+### Add Category Page (add_category.html)
+- **Form Elements**:
+  - Hidden CSRF token
+  - Category name input
+  - Submit button
+- **Additional Features**:
+  - Error/success message display
+- **Inherits base template**
+
+### Post Detail Page (postdetail.html)
+- **Display Elements**:
+  - Post title
+  - Timestamp
+  - Reading time (if available)
+  - Featured image (if available)
+  - Post content
+  - View count
+- **Formatting**:
+  - Pre-wrapped text formatting
+  - Image sized to 600x400
+- **Inherits base template**
+
+### Common Design Patterns
+1. All pages inherit from base.html
+2. Consistent form structure
+3. CSRF protection on all forms
+4. Error handling displays
+5. Responsive user feedback
+6. Clear navigation hierarchy
+7. User authentication awareness
+8. File upload handling for images
+
+This structure follows a clean, hierarchical template system with proper separation of concerns and consistent user interface elements across all pages.

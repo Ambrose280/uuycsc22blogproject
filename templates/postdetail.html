@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<article>
+    <h1>{{ post.title }}</h1>
+
+    <p><strong>Posted on:</strong> {{ post.timestamp }}</p>
+
+    {% if post.reading_time %}
+        <p><strong>Reading time:</strong> {{ post.reading_time }} min</p>
+    {% endif %}
+
+    {% if post.featured_image %}
+<img src="{{ url_for('static', filename='images/' + post['featured_image']) }}" alt="Featured Image" width="600" height="400">
+
+
+    {% endif %}
+
+    <div style="white-space: pre-wrap;">
+        {{ post.content }}
+    </div>
+
+    <hr>
+  
+</article>
+{% endblock %}
