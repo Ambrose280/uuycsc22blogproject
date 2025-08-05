@@ -4,22 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Blog{% endblock %}</title>
+    <!-- Charter (serif body font like Medium) -->
+<link href="https://fonts.googleapis.com/css2?family=Charter&display=swap" rel="stylesheet">
+<!-- Helvetica Neue fallback -->
+<link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% block head %}{% endblock %}
 </head>
 <body>
     <header>
-        <h1>My Blog</h1>
+        <h1>Group2 UUYCSC22 Project</h1>
         <nav>
             <a href="{{ url_for('index') }}">Home</a>
             <a href="#">About</a>
+            <a href="{{ url_for('add_category') }}">Add category</a>
             <a href="#">Contact</a>
+            <a href="{{ url_for('signup') }}">Sign Up</a>
 
             {% if user %}
                 <span style="margin-left: 1rem;">Welcome, {{ user.username }}!</span>
                 <a href="{{ url_for('logout') }}">Logout</a>
 
                  <a href="{{ url_for('createpost') }}">Create Post</a>
+
+                 
             {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
             {% endif %}

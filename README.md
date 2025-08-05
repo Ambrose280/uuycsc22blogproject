@@ -1,4 +1,14 @@
 
+
+inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host noprefixroute 
+    inet 192.168.1.124/24 brd 192.168.1.255 scope global dynamic noprefixroute wlp0s20f3
+    inet6 fe80::cfe6:5eb:dc9e:7383/64 scope link noprefixroute 
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+    inet 192.168.1.179/24 brd 192.168.1.255 scope global dynamic noprefixroute enx00a0c6000000
+    inet6 fe80::211e:da51:8da5:ecb8/64 scope link noprefixroute 
+
+    
 ````
 
 This implementation:

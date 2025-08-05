@@ -5,59 +5,60 @@
     box-sizing: border-box;
 }
 
+/* BODY */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #ffffff;
-    color: #0f1419; /* Twitter default text color */
-    line-height: 1.5;
+    font-family: 'Charter', 'Georgia', serif;
+    background-color: #fafafa;
+    color: #1c1c1c;
+    line-height: 1.75;
     padding: 2rem;
-    max-width: 1000px;
+    max-width: 740px;
     margin: auto;
+    font-size: 1.125rem;
 }
-
 
 /* HEADER */
 header {
-    background: #fff;
-    border-bottom: 2px solid #000;
-    padding: 1rem 0;
+    background: transparent;
+    border-bottom: 1px solid #ddd;
+    padding: 1rem 0 2rem;
     margin-bottom: 2rem;
 }
 
 header h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
 }
 
 /* NAVIGATION */
 nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
-    flex-wrap: wrap;
 }
 
 nav a {
-    color: #000;
-    padding: 0.5rem 1rem;
-    background: #eee;
-    border: 2px solid #000;
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #1a8917;
     text-decoration: none;
-    font-weight: bold;
-    transition: 0.1s;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: opacity 0.2s ease;
 }
 
 nav a:hover {
-    background: #000;
-    color: #fff;
+    opacity: 0.7;
 }
 
 /* MAIN */
 main {
-    padding: 1rem;
-    background: #fff;
-    border: 2px solid #000;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     margin-bottom: 2rem;
 }
 
@@ -72,101 +73,132 @@ input[type="password"],
 textarea,
 select {
     width: 100%;
-    padding: 1rem;
-    border: 2px solid #000;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
     background: #fff;
+    border-radius: 4px;
     font-size: 1rem;
-    font-family: monospace;
     margin-bottom: 1rem;
+    font-family: inherit;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #1a8917;
+    outline: none;
+}
+
+/* BUTTON */
 button {
-    background: #000;
+    background: #1a8917;
     color: #fff;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid #000;
+    padding: 0.6rem 1.25rem;
+    border: none;
+    border-radius: 999px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.1s;
+    font-family: 'Helvetica Neue', sans-serif;
+    transition: background 0.2s ease;
 }
 
 button:hover {
-    background: #fff;
-    color: #000;
+    background: #166f14;
 }
 
 /* POST */
 .post {
-    padding: 1rem;
-    border: 2px solid #000;
-    margin-bottom: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .post img {
     max-width: 100%;
     height: auto;
-    border: 2px solid #000;
     margin: 1rem 0;
+    border-radius: 4px;
+}
+
+/* POST TITLE */
+.post h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.post p {
+    margin: 0.75rem 0;
 }
 
 /* ALERTS */
 .alert {
     padding: 1rem;
-    border: 2px solid #000;
-    font-weight: bold;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
 }
 
 .alert-error {
-    background: #f33;
-    color: #fff;
+    background: #ffdddd;
+    color: #b71c1c;
 }
 
 .alert-success {
-    background: #3f3;
-    color: #000;
+    background: #ddffdd;
+    color: #1b5e20;
 }
 
 /* FOOTER */
 footer {
-    border-top: 2px solid #000;
-    padding: 1rem 0;
+    border-top: 1px solid #e0e0e0;
+    padding: 2rem 0;
     text-align: center;
     font-size: 0.9rem;
+    color: #999;
 }
 
 /* CATEGORY + METADATA */
 .category {
-    background: #ddd;
+    background: #f2f2f2;
     padding: 0.3rem 0.6rem;
-    display: inline-block;
     font-size: 0.85rem;
+    border-radius: 3px;
     margin-right: 0.5rem;
-    border: 1px solid #000;
+    display: inline-block;
 }
 
 .draft-badge {
-    background: yellow;
-    color: #000;
-    font-weight: bold;
-    padding: 0.2rem 0.5rem;
-    border: 1px solid #000;
+    background: #fff3cd;
+    color: #856404;
     font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
 }
 
 .reading-time,
 .view-count {
     font-size: 0.85rem;
-    color: #333;
+    color: #666;
 }
 
-/* MEDIA QUERY */
+/* MEDIA QUERIES */
 @media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
     nav {
         flex-direction: column;
     }
 
     nav a {
-        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    main {
+        padding: 1rem;
     }
 }
