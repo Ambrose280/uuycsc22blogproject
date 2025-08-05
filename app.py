@@ -4,9 +4,12 @@ from functools import wraps
 from flask import g
 import os
 import re
+
 import sqlite3
 import secrets
 import hashlib
+
+from datetime import datetime
 app = Flask(__name__)
 
 app.secret_key = 'uuycscs@#1234'
@@ -192,9 +195,10 @@ def add_category():
 
 
 
-@app.route('/post/<int:post_id>')
+@app.route('/post/<int:post_id>', methods=['GET'])
 def view_post(post_id):
     db = get_db()
+    
     post = db.execute("""
         SELECT post.*, user.username, category.name as category_name
         FROM post
@@ -205,8 +209,40 @@ def view_post(post_id):
     
     if not post:
         return "Post not found", 404
-    
-    return render_template('postdetail.html', post=post)
+
+    comments = db.execute("""
+        SELECT comment.*, user.username 
+        FROM comment
+        JOIN user ON comment.user_id = user.id
+        WHERE comment.post_id = ?
+        ORDER BY comment.timestamp DESC
+    """, (post_id,)).fetchall()
+
+    user = session.get('user')  # Assuming user is stored in session
+
+    return render_template('postdetail.html', post=post, comments=comments, user=user)
+
+
+
+@app.route('/post/<int:post_id>/comment', methods=['POST'])
+def add_comment(post_id):
+    user = g.user
+    if not user:
+        return redirect(url_for('login'))
+
+    text = request.form.get('text')
+    if not text:
+        return "Comment text is required", 400
+
+    db = get_db()
+    db.execute("""
+        INSERT INTO comment (post_id, user_id, text, timestamp)
+        VALUES (?, ?, ?, ?)
+    """, (post_id, user['id'], text, datetime.utcnow()))
+    db.commit()
+
+    return redirect(url_for('view_post', post_id=post_id))
+
 
 
 @app.route('/createpost', methods=['GET', 'POST'])
