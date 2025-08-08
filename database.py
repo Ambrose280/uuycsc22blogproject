@@ -4,11 +4,16 @@ from flask import g, current_app
 DATABASE = 'blog.db'
 
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-        db.row_factory = sqlite3.Row 
-    return db
+    if 'db' not in g:
+        g.db = psycopg2.connect(
+            dbname=current_app.config['DB_NAME'],
+            user=current_app.config['DB_USER'],
+            password=current_app.config['DB_PASSWORD'],
+            host=current_app.config['DB_HOST'],
+            port=current_app.config.get('DB_PORT', 5432),
+            cursor_factory=RealDictCursor
+        )
+    return g.db
 
 def close_connection(exception):
     db = getattr(g, '_database', None)
