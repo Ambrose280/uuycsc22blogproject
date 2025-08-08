@@ -85,38 +85,6 @@ def get_post_by_id(post_id):
         post = cur.fetchone()
     return post
 
-
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static/uploads')
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    f = request.files.get('upload')
-    if not f:
-        return jsonify(uploaded=0, error={'message': 'No file uploaded'})
-
-    filepath = os.path.join(UPLOAD_FOLDER, f.filename)
-    f.save(filepath)
-
-    file_url = url_for('static', filename=f'uploads/{f.filename}')
-    return jsonify(uploaded=1, fileName=f.filename, url=file_url)
-
-UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Ensure folder exists
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def simple_secure_filename(filename):
-    # Remove anything not alphanumeric, dash, underscore or dot
-    filename = re.sub(r'[^A-Za-z0-9_.-]', '', filename)
-    return filename
-
-
 # Fix editpost function
 @app.route('/editpost/<int:post_id>', methods=['GET', 'POST'])
 @login_required
