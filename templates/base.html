@@ -17,10 +17,10 @@
         <h1>Group2 UUYCSC22 Project</h1>
         <nav>
             <a href="{{ url_for('index') }}">Home</a>
-            <a href="#">About</a>
+        
             <a href="{{ url_for('add_category') }}">Add category</a>
-            <a href="#">Contact</a>
-            <a href="{{ url_for('signup') }}">Sign Up</a>
+
+            
 
             {% if user %}
                 <span style="margin-left: 1rem;">Welcome, {{ user.username }}!</span>
@@ -31,6 +31,7 @@
                  
             {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('signup') }}">Sign Up</a>
             {% endif %}
         </nav>
     </header>
@@ -40,7 +41,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 My Blog</p>
+        <p>&copy; 2025 Group2 UUYCSC22 Project</p>
     </footer>
     {% block scripts %}{% endblock %}
 </body>

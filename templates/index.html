@@ -27,7 +27,7 @@
             <h2>{{ post.title }}</h2>
             <p>
                 Posted by <strong>{{ post.username }}</strong> 
-                on {{ post.timestamp }} 
+                on {{ post.timestamp.strftime('%B %d, %Y at %I:%M %p') }} 
                 | Category: {{ post.category_name or 'Uncategorized' }} 
                 | 💬 {{ post.comment_count }} comments
             </p>

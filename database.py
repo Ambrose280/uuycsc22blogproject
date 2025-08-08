@@ -1,7 +1,6 @@
-import sqlite3
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from flask import g, current_app
-
-DATABASE = 'blog.db'
 
 def get_db():
     if 'db' not in g:
@@ -16,13 +15,15 @@ def get_db():
     return g.db
 
 def close_connection(exception):
-    db = getattr(g, '_database', None)
+    db = g.pop('db', None)
     if db is not None:
         db.close()
 
 def init_db():
     with current_app.app_context():
         db = get_db()
-        with open('schema.sql', 'r') as f:
-            db.executescript(f.read())
-        print("Initialized the database.")
+        with db.cursor() as cursor:
+            with open('schema.sql', 'r') as f:
+                cursor.execute(f.read())
+            db.commit()
+        print("Initialized the PostgreSQL database.")
