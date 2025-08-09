@@ -15,7 +15,7 @@ Web-based blogging platform built on a monolithic architecture that allows users
 
 - Flask backend with Postgres database
 - Frontend served from Flask templates with static assets
-- API endpoints for events, users, and bookings
+- API endpoints for post & category creation, deletion and editing
 
 ---
 
