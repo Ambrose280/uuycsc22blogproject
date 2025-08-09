@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from database import get_db, close_connection, init_db
 from functools import wraps
 from flask import g
@@ -84,8 +84,39 @@ def get_post_by_id(post_id):
         """, (post_id,))
         post = cur.fetchone()
     return post
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    db = get_db()
+    current_user_id = session.get('user_id')
 
-# Fix editpost function
+    with db.cursor(cursor_factory=RealDictCursor) as cur:
+        # check if post exists and belongs to current user
+        cur.execute("""
+            SELECT id, user_id 
+            FROM post 
+            WHERE id = %s
+        """, (post_id,))
+        post = cur.fetchone()
+
+        if not post:
+            flash("Post not found.", "warning")
+            return redirect(url_for('index'))
+
+        if post['user_id'] != current_user_id:
+            flash("You are not authorized to delete this post.", "danger")
+            return redirect(url_for('index'))
+
+        # delete comments first if no ON DELETE CASCADE
+        cur.execute("DELETE FROM comment WHERE post_id = %s", (post_id,))
+
+        # delete the post
+        cur.execute("DELETE FROM post WHERE id = %s", (post_id,))
+
+        db.commit()
+
+    flash("Post deleted successfully.", "success")
+    return redirect(url_for('index'))
+
 @app.route('/editpost/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def editpost(post_id):
@@ -272,24 +303,29 @@ def createpost():
 def index():
     db = get_db()
     search = request.args.get('search', '').strip()
-    category_id = request.args.get('category_id')
+    category_id = request.args.get('category_id', '').strip()
 
     query = """
-        SELECT 
-            post.id, post.title, post.timestamp, post.featured_image,
-            "user".username,
-            category.name AS category_name,
-            (SELECT COUNT(*) FROM comment WHERE comment.post_id = post.id) AS comment_count
-        FROM post
-        JOIN "user" ON post.user_id = "user".id
-        LEFT JOIN category ON post.category_id = category.id
-        WHERE post.draft = false
-    """
+    SELECT 
+        post.id, 
+        post.title, 
+        post.timestamp, 
+        post.featured_image,
+        post.category_id, -- ✅ Needed for category links
+        "user".username,
+        category.name AS category_name,
+        (SELECT COUNT(*) FROM comment WHERE comment.post_id = post.id) AS comment_count
+    FROM post
+    JOIN "user" ON post.user_id = "user".id
+    LEFT JOIN category ON post.category_id = category.id
+    WHERE post.draft = false
+"""
+
     params = []
 
     if search:
         query += " AND post.title ILIKE %s"
-        params.append(f'%{search}%')
+        params.append(f"%{search}%")
 
     if category_id:
         query += " AND post.category_id = %s"
@@ -297,14 +333,58 @@ def index():
 
     query += " ORDER BY post.timestamp DESC"
 
-    with db.cursor(cursor_factory=RealDictCursor) as cur:
+    with db.cursor() as cur:
         cur.execute(query, params)
         posts = cur.fetchall()
-        
+
+        cur.execute("SELECT id, name FROM category ORDER BY name ASC")
+        categories = cur.fetchall()
+
+    return render_template(
+        'index.html',
+        posts=posts,
+        categories=categories,
+        search=search,
+        category_id=category_id
+    )
+
+@app.route('/category/<int:category_id>')
+def category_view(category_id):
+    db = get_db()
+
+    query = """
+        SELECT 
+            post.id, 
+            post.title, 
+            post.timestamp, 
+            post.featured_image,
+            post.category_id,  -- ✅ include this
+            "user".username,
+            category.name AS category_name,
+            (SELECT COUNT(*) FROM comment WHERE comment.post_id = post.id) AS comment_count
+        FROM post
+        JOIN "user" ON post.user_id = "user".id
+        LEFT JOIN category ON post.category_id = category.id
+        WHERE post.draft = false
+          AND post.category_id = %s
+        ORDER BY post.timestamp DESC
+    """
+
+    with db.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(query, (category_id,))
+        posts = cur.fetchall()
+
         cur.execute("SELECT id, name FROM category")
         categories = cur.fetchall()
 
-    return render_template('index.html', posts=posts, categories=categories, search=search, category_id=category_id)
+    return render_template(
+        'index.html',
+        posts=posts,
+        categories=categories,
+        search='',
+        category_id=str(category_id)
+    )
+
 
 # Fix login function
 @app.route('/login', methods=['GET', 'POST'])

@@ -1,122 +1,65 @@
+# NestBlog
 
+![School Project](https://img.shields.io/badge/School%20Project-✔️-blue)
 
-inet 127.0.0.1/8 scope host lo
-    inet6 ::1/128 scope host noprefixroute 
-    inet 192.168.1.124/24 brd 192.168.1.255 scope global dynamic noprefixroute wlp0s20f3
-    inet6 fe80::cfe6:5eb:dc9e:7383/64 scope link noprefixroute 
-    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
-    inet 192.168.1.179/24 brd 192.168.1.255 scope global dynamic noprefixroute enx00a0c6000000
-    inet6 fe80::211e:da51:8da5:ecb8/64 scope link noprefixroute 
+🎓 **School Project** – Event Management System built with **Flask (Python)** and **Postgres**, featuring a **frontend built with HTML, CSS, and JavaScript** served via Flask templates.  
+📖 **Course:** UUY-CSC222
+🏫 **Department:** Computer Science
+👥 **Group:** 2
+🎓 **Series:** 022/023
 
-    
-````
+Web-based blogging platform built on a monolithic architecture that allows users to create, edit and publish blog posts.
+---
 
-This implementation:
-1. Handles form submission
-2. Validates required fields
-3. Checks email format
-4. Stores raw password in database (not recommended for production)
-5. Handles duplicate username/email errors
-6. Redirects to login page after successful registration
+## 🚀 Features
 
-Make sure you have the templates directory created and the `signup.html` file in it before running the application.
+- Flask backend with Postgres database
+- Frontend served from Flask templates with static assets
+- API endpoints for events, users, and bookings
 
-**Note**: Storing plain text passwords is not secure and should never be done in a production environment. Always use password hashing in real applications.
+---
 
-Similar code found with 2 license types
+## 🛠️ Tech Stack
 
-Ambrose280: analyse the contentes of these files and gimme the basic desing of all the elements
+- Python 3.x, Flask
+- Postgres database
+- HTML, CSS, JavaScript served via Flask `templates` and `static` folders
 
-GitHub Copilot: I'll analyze the template files and break down their basic design structure:
+---
 
-### Base Template (base.html)
-- **Structure**:
-  - Header with site title "My Blog"
-  - Navigation bar with:
-    - Home, About, Contact links
-    - Conditional user menu (logged in/out state)
-  - Main content area (`{% block content %}`)
-  - Footer with copyright
-- **Dynamic Elements**:
-  - User welcome message if logged in
-  - Login/Logout toggle
-  - Create Post link for logged-in users
+## 🔧 Setup Instructions
 
-### Signup Page (signup.html)
-- **Form Elements**:
-  - Hidden CSRF token
-  - Username input (text)
-  - Email input (email)
-  - Password input (password)
-  - Submit button "Create Account"
-- **Inherits base template**
+### 1. Clone the repository
 
-### Login Page (login.html)
-- **Form Elements**:
-  - Hidden CSRF token
-  - Username input
-  - Password input
-  - Login button
-- **Additional Features**:
-  - Error message display (in red)
-  - Welcome message if logged in
-- **Inherits base template**
+```bash
+git clone https://github.com/Faculty-of-Computing/uuycsc22blogproject.git
+cd uuycsc22blogproject
+```
 
-### Create Post Page (createpost.html)
-- **Form Elements**:
-  - Hidden CSRF token
-  - Title input
-  - Featured image upload
-  - Category dropdown
-  - Draft checkbox
-  - Content textarea (80 cols × 10 rows)
-  - Submit button
-- **Additional Features**:
-  - Error message display
-  - File upload support
-- **Inherits base template**
+### 2. Create and activate a Python virtual environment
 
-### Edit Post Page (editpost.html)
-- **Form Elements**:
-  - Similar to create post but pre-filled
-  - Current image display
-  - Option to change image
-  - Category selection (with current selection)
-  - Draft status toggle
-  - Content editor
-  - Update button
-- **Inherits base template**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-### Add Category Page (add_category.html)
-- **Form Elements**:
-  - Hidden CSRF token
-  - Category name input
-  - Submit button
-- **Additional Features**:
-  - Error/success message display
-- **Inherits base template**
+### 3. Install dependencies
 
-### Post Detail Page (postdetail.html)
-- **Display Elements**:
-  - Post title
-  - Timestamp
-  - Reading time (if available)
-  - Featured image (if available)
-  - Post content
-  - View count
-- **Formatting**:
-  - Pre-wrapped text formatting
-  - Image sized to 600x400
-- **Inherits base template**
+```bash
+pip install -r requirements.txt
+```
 
-### Common Design Patterns
-1. All pages inherit from base.html
-2. Consistent form structure
-3. CSRF protection on all forms
-4. Error handling displays
-5. Responsive user feedback
-6. Clear navigation hierarchy
-7. User authentication awareness
-8. File upload handling for images
+### 4. Run the Flask application
 
-This structure follows a clean, hierarchical template system with proper separation of concerns and consistent user interface elements across all pages.
+```bash
+python app.py
+```
+
+The app will be available at:
+
+```text
+http://localhost:5000
+```
+
+---
+
